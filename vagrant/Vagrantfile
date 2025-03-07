@@ -1,0 +1,41 @@
+Vagrant.configure("2") do |config|
+    #PostgresSQL VM
+    config.vm.define "db01" do |db|
+        db.vm.box = "ubuntu/focal64"
+        db.vm.network "private_network", ip: "192.168.56.15"
+        db.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024"
+        end
+        db.vm.provision "shell", path: "scripts/db_setup.sh"
+    end
+
+    # Redis VM
+    config.vm.define "redis01" do |redis|
+        redis.vm.box ="ubuntu/focal64"
+        redis.vm.network "private_network", ip:"192.168.56.16"
+        redis.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024"
+        end
+        redis.vm.provision "shell", path: "scripts/redis_setup.sh"
+    end
+
+    # Backend VM
+    config.vm.define "app01" do |app|
+        app.vm.box ="ubuntu/focal64"
+        app.vm.network "private_network", ip:"192.168.56.17"
+        app.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024"
+        end
+        app.vm.provision "shell", path: "scripts/app_setup.sh"
+    end
+
+    # Frontend VM
+    config.vm.define "web02" do |web|
+        web.vm.box ="ubuntu/focal64"
+        web.vm.network "private_network", ip:"192.168.56.18"
+        web.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024"
+        end
+        web.vm.provision "shell", path: "scripts/web_setup.sh"
+    end
+end
